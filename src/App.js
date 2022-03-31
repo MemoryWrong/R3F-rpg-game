@@ -21,7 +21,7 @@ function Light(props) {
       onClick={(event) => setActive(!active)}
       onPointerOver={(event) => setHover(true)}
       onPointerOut={(event) => setHover(false)}>
-      <boxGeometry args={[1, 1, 1]} />
+      <sphereGeometry args={[1, 16, 16]} />
       <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
     </mesh>
   )
@@ -32,7 +32,7 @@ function App() {
 
   return (
     <Canvas>
-      <OrbitControls autoRotate={true} />
+      <OrbitControls autoRotate={false} />
       <pointLight  intensity={5} position={lightPos} />
       <Light position={lightPos} />     
       <Suspense fallback={null}>
