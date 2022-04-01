@@ -5,7 +5,7 @@ import { Plane } from "@react-three/drei";
 import { useControls } from './utils/useControls'
 
 const Terrain = () => {
-  const height = useLoader(THREE.TextureLoader, "hmap2.png");
+  const height = useLoader(THREE.TextureLoader, "hmap1.png");
   const [wireframe, setWireframe] = useState(false)
   const controls = useControls()
 
