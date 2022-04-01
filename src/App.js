@@ -1,9 +1,10 @@
-import React, { useRef, useState, Suspense } from 'react'
+import React, { useRef, useEffect, useState, Suspense } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import './App.css';
 import Terrain from './Terrain';
 import Champion from './Champion';
 import { OrbitControls, GizmoHelper, GizmoViewport } from "@react-three/drei";
+import { PositionalAudio } from '@react-three/drei'
 
 function Light(props) {
   // This reference will give us direct access to the mesh
@@ -31,6 +32,14 @@ function Light(props) {
 function App() {
   const lightPos = [0, 3, 5];
   const [play, setPlay] = useState(false)
+  const engineAudio = useRef(null)
+  const [audio] = useState(new Audio('/sounds/wow.mp3'));
+
+  useEffect(() => {
+     audio.play()
+    },
+    []
+  );
 
   return (
     <>
@@ -49,7 +58,7 @@ function App() {
     <div style={{ color: 'white', position: 'absolute', top: 30, left: 40 }}>
       <pre>
         Must run fullscreen!
-        <br />
+        <br /> arrow key to move
         <br /> W / E to switch wireframe on / off
         <br /><button onClick={() => setPlay(!play)}>rotate on / off</button>
       </pre>
