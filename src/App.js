@@ -1,10 +1,9 @@
-import React, { useRef, useEffect, useState, Suspense } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import './App.css';
 import Terrain from './Terrain';
 import Champion from './Champion';
 import { OrbitControls, GizmoHelper, GizmoViewport } from "@react-three/drei";
-import { PositionalAudio } from '@react-three/drei'
 
 function Light(props) {
   // This reference will give us direct access to the mesh
@@ -32,19 +31,16 @@ function Light(props) {
 function App() {
   const lightPos = [0, 3, 5];
   const [play, setPlay] = useState(false)
-  const engineAudio = useRef(null)
-  const [audio] = useState(new Audio('/sounds/wow.mp3'));
+  const audio = new Audio('/sounds/wow.mp3');
 
-  useEffect(() => {
-     audio.play()
-    },
-    []
-  );
+  const playAudio = () => {
+    audio.play();
+  }
 
   return (
     <>
     <Canvas>
-      <OrbitControls autoRotate={play} minPolarAngle={Math.PI / 2.4} maxPolarAngle={Math.PI / 2.4} />
+      <OrbitControls autoRotate={true} minPolarAngle={Math.PI / 2.4} maxPolarAngle={Math.PI / 2.4} />
       <pointLight  intensity={5} position={lightPos} />
       <GizmoHelper
         alignment="bottom-right" // widget alignment within scene
@@ -52,8 +48,9 @@ function App() {
       >
         <GizmoViewport axisColors={['red', 'green', 'blue']} labelColor="black" />
       </GizmoHelper>
-      <Terrain />
-      <Champion position={[0, 0, 0]} />
+      <Light />
+      {/* <Terrain />
+      <Champion position={[0, 0, 0]} /> */}
     </Canvas>
     <div style={{ color: 'white', position: 'absolute', top: 30, left: 40 }}>
       <pre>
@@ -61,6 +58,7 @@ function App() {
         <br /> arrow key to move
         <br /> W / E to switch wireframe on / off
         <br /><button onClick={() => setPlay(!play)}>rotate on / off</button>
+        <br /><button onClick={() => playAudio()}>play Music</button>
       </pre>
     </div>
     </>

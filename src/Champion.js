@@ -7,8 +7,8 @@ import { useLoader } from "@react-three/fiber";
 
 function Champion({ props }) {
   const mesh = useRef()
-  const controls = useControls()
   const gltf = useLoader(GLTFLoader, '/scene.gltf');
+  const controls = useControls()
 
   useFrame(() => {
     const { forward, backward, left, right } = controls.current

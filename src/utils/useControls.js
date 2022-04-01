@@ -30,6 +30,6 @@ export function useControls() {
   useKeyPress(['ArrowRight'], (pressed) => (keys.current.right = pressed))
   useKeyPress(['w'], (pressed) => (keys.current.wireframeOn = pressed))
   useKeyPress(['e'], (pressed) => (keys.current.wireframeOff = pressed))
-  useKeyPress(['a'], (pressed) => (keys.current.auto = pressed))
+  // useKeyPress(['a'], (pressed) => (keys.current.auto = pressed))
   return keys
 }
