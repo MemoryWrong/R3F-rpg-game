@@ -30,7 +30,6 @@ function Light(props) {
 
 function App() {
   const lightPos = [0, 3, 5];
-  const [play, setPlay] = useState(false)
   const audio = new Audio('/sounds/wow.mp3');
 
   const playAudio = () => {
@@ -48,16 +47,15 @@ function App() {
       >
         <GizmoViewport axisColors={['red', 'green', 'blue']} labelColor="black" />
       </GizmoHelper>
-      <Light />
-      {/* <Terrain />
-      <Champion position={[0, 0, 0]} /> */}
+      {/* <Light /> */}
+      <Terrain />
+      <Champion position={[0, 0, 0]} />
     </Canvas>
     <div style={{ color: 'white', position: 'absolute', top: 30, left: 40 }}>
       <pre>
         Must run fullscreen!
         <br /> arrow key to move
         <br /> W / E to switch wireframe on / off
-        <br /><button onClick={() => setPlay(!play)}>rotate on / off</button>
         <br /><button onClick={() => playAudio()}>play Music</button>
       </pre>
     </div>
