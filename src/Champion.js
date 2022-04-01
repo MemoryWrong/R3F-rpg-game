@@ -13,10 +13,10 @@ function Champion({ props }) {
   useFrame(() => {
     const { forward, backward, left, right } = controls.current
     if(forward || backward ) {
-      forward? mesh.current.position.x += 0.1 : mesh.current.position.x += -0.1;
+      forward? mesh.current.position.z += 0.01 : mesh.current.position.z += -0.01;
     }
     if(left || right ) {
-      left? mesh.current.position.z += 0.1 : mesh.current.position.z += -0.1;
+      left? mesh.current.position.x += 0.01 : mesh.current.position.x += -0.01;
     }
   })
 

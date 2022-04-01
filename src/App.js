@@ -30,11 +30,12 @@ function Light(props) {
 
 function App() {
   const lightPos = [0, 3, 5];
+  const [play, setPlay] = useState(false)
 
   return (
     <>
     <Canvas>
-      <OrbitControls autoRotate={true} minPolarAngle={Math.PI / 2.4} maxPolarAngle={Math.PI / 2.4} />
+      <OrbitControls autoRotate={play} minPolarAngle={Math.PI / 2.4} maxPolarAngle={Math.PI / 2.4} />
       <pointLight  intensity={5} position={lightPos} />
       <GizmoHelper
         alignment="bottom-right" // widget alignment within scene
@@ -50,6 +51,7 @@ function App() {
         Must run fullscreen!
         <br />
         <br /> W / E to switch wireframe on / off
+        <br /><button onClick={() => setPlay(!play)}>rotate on / off</button>
       </pre>
     </div>
     </>
