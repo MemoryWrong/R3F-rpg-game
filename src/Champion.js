@@ -2,10 +2,13 @@ import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 // import { useRaycastVehicle } from '@react-three/cannon'
 import { useControls } from './utils/useControls'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { useLoader } from "@react-three/fiber";
 
-function Vehicle({ props }) {
+function Champion({ props }) {
   const mesh = useRef()
   const controls = useControls()
+  const gltf = useLoader(GLTFLoader, '/scene.gltf');
 
   useFrame(() => {
     const { forward, backward, left, right } = controls.current
@@ -18,15 +21,13 @@ function Vehicle({ props }) {
   })
 
   return (
-    <mesh
-      {...props}
-      ref={mesh}
-      scale={1}
-      >
-      <sphereGeometry args={[1, 16, 16]} />
-      <meshStandardMaterial color={'red'} />
-    </mesh>
+    <primitive
+        ref={mesh}
+        object={gltf.scene}
+        position={[0,0,0]}
+        scale={0.0005}
+    />
   )
 }
 
-export default Vehicle
+export default Champion;

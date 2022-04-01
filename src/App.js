@@ -2,7 +2,7 @@ import React, { useRef, useState, Suspense } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import './App.css';
 import Terrain from './Terrain';
-import Vehicle from './Vehicle';
+import Champion from './Champion';
 import { OrbitControls, GizmoHelper, GizmoViewport } from "@react-three/drei";
 
 function Light(props) {
@@ -43,7 +43,7 @@ function App() {
         <GizmoViewport axisColors={['red', 'green', 'blue']} labelColor="black" />
       </GizmoHelper>
       <Terrain />
-      <Vehicle position={[0, 1, 0]} />
+      <Champion position={[0, 0, 0]} />
     </Canvas>
     <div style={{ color: 'white', position: 'absolute', top: 30, left: 40 }}>
       <pre>
