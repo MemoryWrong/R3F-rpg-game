@@ -1,25 +1,32 @@
 import React, {useState} from "react";
-import { useLoader } from "@react-three/fiber";
+import { useLoader, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { Plane } from "@react-three/drei";
+import { useControls } from './utils/useControls'
 
 const Terrain = () => {
   const height = useLoader(THREE.TextureLoader, "hmap2.png");
   const [wireframe, setWireframe] = useState(false)
-  // const normals = useLoader(THREE.TextureLoader, "normals.png");
-  // const colors = useLoader(THREE.TextureLoader, "colors.png");
+  const controls = useControls()
 
+  useFrame(() => {
+    const {wireframeOn, wireframeOff } = controls.current
+    if(wireframeOff ) {
+      setWireframe(false)
+    }
+    if(wireframeOn ) {
+      setWireframe(true)
+    }
+  })
   return (
     <group>
       <Plane
         rotation={[-Math.PI / 2, 0, 0]}
-        position={[0, -3, 0]}
+        position={[0, 0, 0]}
         args={[64, 64, 1024, 1024]}
-        onClick={(event) => setWireframe(!wireframe)}
       >
         <meshStandardMaterial
           wireframe={wireframe}
-          // roughness={1}
           color={0xa06851}
           metalness={0.2}
           displacementScale={3}

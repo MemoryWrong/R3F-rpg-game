@@ -2,7 +2,8 @@ import React, { useRef, useState, Suspense } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import './App.css';
 import Terrain from './Terrain';
-import { OrbitControls } from "@react-three/drei";
+import Vehicle from './Vehicle';
+import { OrbitControls, GizmoHelper, GizmoViewport } from "@react-three/drei";
 
 function Light(props) {
   // This reference will give us direct access to the mesh
@@ -28,17 +29,30 @@ function Light(props) {
 }
 
 function App() {
-  const lightPos = [0, 0, 5];
+  const lightPos = [0, 3, 5];
 
   return (
+    <>
     <Canvas>
-      <OrbitControls autoRotate={false} />
+      <OrbitControls autoRotate={true} minPolarAngle={Math.PI / 2.4} maxPolarAngle={Math.PI / 2.4} />
       <pointLight  intensity={5} position={lightPos} />
-      <Light position={lightPos} />     
-      <Suspense fallback={null}>
-        <Terrain />
-      </Suspense>
+      <GizmoHelper
+        alignment="bottom-right" // widget alignment within scene
+        margin={[80, 80]} // widget margins (X, Y)
+      >
+        <GizmoViewport axisColors={['red', 'green', 'blue']} labelColor="black" />
+      </GizmoHelper>
+      <Terrain />
+      <Vehicle position={[0, 1, 0]} />
     </Canvas>
+    <div style={{ color: 'white', position: 'absolute', top: 30, left: 40 }}>
+      <pre>
+        Must run fullscreen!
+        <br />
+        <br /> W / E to switch wireframe on / off
+      </pre>
+    </div>
+    </>
   )
 }
 export default App;
