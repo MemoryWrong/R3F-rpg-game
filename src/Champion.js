@@ -42,7 +42,6 @@ function Champion() {
     } = controls.current
     // for player movement
     if (forward) {
-      console.log(controls, forward);
       setAction('run')
       group.current.position.z += 0.05;
     } 
