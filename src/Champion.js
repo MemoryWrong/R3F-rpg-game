@@ -5,8 +5,7 @@ import { useControls } from './utils/useControls'
 // import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 // import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 // import { useLoader } from "@react-three/fiber";
-import { useAnimations } from "@react-three/drei";
-import { useGLTF } from "@react-three/drei";
+import { Html, PerspectiveCamera, useGLTF, useAnimations } from "@react-three/drei"
 
 function Champion() {
   const group = useRef()
@@ -30,22 +29,38 @@ function Champion() {
   }, [actions, action, previousAction]);
   
   useFrame(() => {
-    const { forward, backward, left, right } = controls.current
+    const { 
+      forward, 
+      backward, 
+      left, 
+      right,
+      attack,
+      sepllq,
+      spellw,
+      spelle,
+      spellr,
+    } = controls.current
+    // for player movement
     if (forward) {
+      console.log(controls, forward);
       setAction('run')
       group.current.position.z += 0.05;
+    } 
+    else if (backward) {
+      setAction('run')
+      group.current.position.z -= 0.05;
     }
-    if (backward) {
+    else if (left) {
       setAction('walk')
-      group.current.position.z -= 0.01;
+      group.current.position.x += 0.05;
     }
-    if (left) {
+    else if (right) {
       setAction('walk')
-      group.current.position.x += 0.01;
+      group.current.position.x -= 0.05;
     }
-    if (right) {
-      setAction('walk')
-      group.current.position.x -= 0.01;
+    // for player attack || casting spell
+    else {
+      setAction('idle')
     }
   })
 
@@ -53,16 +68,23 @@ function Champion() {
     <group
       ref={group}
     >
+      {/* use for display player information */}
+      {/* <PerspectiveCamera makeDefault /> */}
+      <Html distanceFactor={10}>
+        <div className="content">
+          Robot
+        </div>
+      </Html>
       <primitive 
         object={scene}
         scale={1}
         position={[0,0,0]}
-        />
+      />
     </group>
   );
 }
 
-function usePrevious(value) {
+const usePrevious = (value) => {
   // The ref object is a generic container whose current property is mutable ...
   // ... and can hold any value, similar to an instance property on a class
   const ref = useRef();
