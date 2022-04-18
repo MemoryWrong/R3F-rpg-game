@@ -22,7 +22,9 @@ function App() {
       <pointLight  intensity={5} position={lightPos} />
       <ambientLight />
       <Terrain />
-      <Champion position={[0, 0, 0]} />
+      <Champion key={0} position={[0, 0, 0]} />
+      <Champion key={1} position={[1, 0, 0]} />
+      <Champion key={2} position={[2, 0, 0]} />
     </Canvas>
     <div style={{ color: 'white', position: 'absolute', top: 30, left: 40 }}>
       <pre>
