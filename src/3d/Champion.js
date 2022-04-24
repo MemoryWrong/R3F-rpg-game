@@ -1,34 +1,31 @@
 import { useRef, useEffect, useState, useMemo } from 'react'
-import { useFrame, useGraph } from '@react-three/fiber'
-// import { useRaycastVehicle } from '@react-three/cannon'
-import { useControls } from './utils/useControls'
-// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-// import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
-// import { useLoader } from "@react-three/fiber";
+import { useFrame, useGraph} from '@react-three/fiber'
+import { useControls } from '../utils/useControls'
+import * as THREE from 'three';
 import { Html, PerspectiveCamera, useGLTF, useAnimations } from "@react-three/drei"
 import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils'
 
 function Champion(props) {
   const group = useRef()
   const { scene, animations, materials } = useGLTF("/characters/bot.glb");
-  const {position} = props;
-
   const { actions } = useAnimations(animations, group);
   const [action, setAction] = useState('idle');
+  const [life, setLife] = useState(props.life? props.life : 10);
+  const name = props.name ? props.name : 'robot';
+
   const previousAction = usePrevious(action);
   const controls = useControls()
 
   const clone = useMemo(() => SkeletonUtils.clone(scene), [scene])
   const { nodes } = useGraph(clone)
 
-  const WALK_SPEED = 0.5;
-  const RUN_SPEED = 1;
-
   useEffect(() => {
-    // agree, headShake, idle, run, sad_pose, sneak_pose, walk
-    console.log(nodes, materials);
+    // setInterval(() => {
+    //   setLife(life => life - 1)
+    // }, 200);
+    console.log(props.target);
+    // console.log(nodes, materials);
   }, []);
-  
 
   useEffect(() => {
     // agree, headShake, idle, run, sad_pose, sneak_pose, walk
@@ -69,21 +66,38 @@ function Champion(props) {
       setAction('walk')
       group.current.position.x -= 0.05;
     }
+    else if (attack) {
+      setAction('agree')
+    }
     // for player attack || casting spell
     else {
       setAction('idle')
     }
   })
 
-  return (
-    <group ref={group} {...props} dispose={null} scale={[0.01,0.01,0.01]}>
-      <group position={props.position}>
-        <primitive object={nodes.mixamorigHips} />
-        <skinnedMesh geometry={nodes.Beta_Joints.geometry} material={materials['Beta_Joints_MAT']} skeleton={nodes.Beta_Joints.skeleton} />
-        <skinnedMesh geometry={nodes.Beta_Surface.geometry} material={materials['asdf1:Beta_HighLimbsGeoSG2']} skeleton={nodes.Beta_Surface.skeleton} />
-      </group>
+  var hitGeom = new THREE.BoxBufferGeometry(props.position.x, props.position.y, props.position.z);
+  var hitMat = new THREE.MeshBasicMaterial({visible: false});
+  // ...
+
+  return life >= 0 ? (
+    <group ref={group} {...props} dispose={null} 
+      onClick={(e) => {
+        e.stopPropagation();
+        console.log('zenmeshuo', group);
+        group.current.position.z += 1;
+      }}>
+        <mesh geometry={hitGeom} material={hitMat}></mesh>
+        <group scale={[0.01, 0.01, 0.01]} >
+          <primitive object={nodes.mixamorigHips} />
+          <skinnedMesh geometry={nodes.Beta_Joints.geometry} material={materials['Beta_Joints_MAT']} skeleton={nodes.Beta_Joints.skeleton} />
+          <skinnedMesh geometry={nodes.Beta_Surface.geometry} material={materials['asdf1:Beta_HighLimbsGeoSG2']} skeleton={nodes.Beta_Surface.skeleton} />
+        </group>
+        <Html>
+          <div>{name}</div>
+          <div>{life}</div>
+        </Html>
     </group>
-  );
+  ) : null;
 }
 
 useGLTF.preload("/characters/bot.glb");
@@ -95,7 +109,7 @@ const usePrevious = (value) => {
   // Store current value in ref
   useEffect(() => {
     ref.current = value;
-  }, [value]); // Only re-run if value changes
+  }, [value]); 
   // Return previous value (happens before update in useEffect above)
   return ref.current;
 }
