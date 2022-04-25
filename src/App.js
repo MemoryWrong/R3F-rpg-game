@@ -1,37 +1,43 @@
+import * as THREE from 'three'
 import React, { useRef, useEffect, useState, createRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import './App.css';
 import Terrain from './3d/Terrain';
 import Player from './3d/Player';
+import Enemy from './3d/Enemy';
 import { OrbitControls, GizmoHelper, GizmoViewport, PerspectiveCamera } from "@react-three/drei";
-import useStore from './store';
+import useStore from './engine/store';
 import { softShadows } from "@react-three/drei"
 
 softShadows()
 
 function App() {
-  const lightPos = [0, 10, 0];
-
-  // test for zustand
-  // states & setStates
-  const {test} = useStore(state => state);
-  const {update} = useStore(state => state);
-  const bears = useStore(state => state.bears)
-  const increasePopulation = useStore(state => state.increasePopulation)
+  const {
+    enemys,
+    enemy,
+    test,
+    actions,
+    mutation,
+  } = useStore(state => state);
   
-  const playAudio = () => {
-    increasePopulation()
-    update('fkn yeah');
-  }
-
-  useEffect(() => {
-  }, []);
+  // useEffect(() => {
+  //   console.log(enemys, enemy);
+  // }, [enemy, enemys]);
 
   return (
     <>
-    <Canvas shadows>
+      <Canvas 
+        shadows 
+        onPointerMove={actions.updateMouse} 
+        onClick={actions.shoot}
+        camera={mutation.camera}
+        onCreated={({ gl }) => {
+          actions.init()
+          gl.setClearColor(new THREE.Color('grey'))
+        }}
+      >
       <axesHelper />
-      <OrbitControls autoRotate={false} minPolarAngle={Math.PI / 2.4} maxPolarAngle={Math.PI / 2.4} />
+      {/* <OrbitControls autoRotate={false} minPolarAngle={Math.PI / 2.4} maxPolarAngle={Math.PI / 2.4} /> */}
       <directionalLight
         castShadow
         position={[2.5, 8, 5]}
@@ -45,20 +51,24 @@ function App() {
         shadow-camera-bottom={-10}
       />
       <pointLight position={[-10, 0, -20]} color="red" intensity={2.5} />
-      <pointLight position={[0, -10, 0]} intensity={1.5} />
-        <ambientLight />
-        <Player />
-        <Terrain />
+      <ambientLight />
+      <Player />
+      {
+        enemys && enemys.map((e, i) => (
+          <Enemy key={i} {...e} position={e.position} />
+        ))
+      }
+      <Terrain />
       </Canvas>
       <div style={{ color: 'white', position: 'absolute', top: 30, left: 40 }}>
-        <pre>
-          Must run fullscreen!
-          <br /> arrow key to move
-          <br /> bears: {bears}
-          <br /> test: {test}
-          <br /> W / E to switch wireframe on / off
-          <br /><button onClick={() => playAudio()}>play Music</button>
-        </pre>
+        <h3>HUD</h3>
+        {
+          enemy && 
+          <>
+            <p>enemy name: {enemy.props.name}</p>
+            <p>enemy id: {enemy.props.id}</p>
+          </>
+        }
       </div>
     </>
   )
