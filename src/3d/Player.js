@@ -11,16 +11,28 @@ function Player(props) {
   let headingRad = 0;
   const velocity = 0.05;
 
-  const points = [];
-  points.push(new THREE.Vector3(0, 0, 0))
-  points.push(new THREE.Vector3(0, 0, -1))
-  const lineGeometry = new THREE.BufferGeometry().setFromPoints(points)
+  // TESTING
+  // const points = [];
+  // points.push(new THREE.Vector3(0, 0, 0))
+  // points.push(new THREE.Vector3(0, 0, -1))
+  // const lineGeometry = new THREE.BufferGeometry().setFromPoints(points)
 
-  useFrame(() => {
-    // update rotate
-    // camera.rotation.copy(playerRef.current.rotation)
-    // console.log(headingRad);
-    // control movement
+  /**
+   * update camera position
+   * to always sit behind the player
+   * and look at player
+   */
+  const updateCamera = () => {
+    camera.position.x = playerRef.current.position.x + Math.sin(headingRad) * 30
+    camera.position.z = playerRef.current.position.z + Math.cos(headingRad) * 30
+    camera.lookAt(playerRef.current.position)
+  }
+
+  /**
+   * use keyboard control to 
+   * move the player
+   */
+  const updateMove = () => {
     const { 
       forward, 
       backward, 
@@ -43,6 +55,11 @@ function Player(props) {
       headingRad -= 0.05;
       playerRef.current.rotation.y = headingRad;
     }
+  }
+
+  useFrame(() => {
+    updateMove();
+    updateCamera();
   })
 
   return (
@@ -54,11 +71,11 @@ function Player(props) {
       receiveShadow
       onPointerOver={() => setColor('lightgreen')}
       onPointerLeave={() => setColor('green')}
-      >
-      {/* <sphereBufferGeometry attach="geometry" args={[0.5, 32, 32]} /> */}
-      <line geometry={lineGeometry}>
+    >
+      {/* for testing show heading of player */}
+      {/* <line geometry={lineGeometry}>
         <lineBasicMaterial attach="material" color={'red'} linewidth={10} linecap={'round'} linejoin={'round'} />
-      </line>
+      </line> */}
       <boxGeometry attach="geometry" args={[1, 1, 1]} />
       <meshStandardMaterial attach="material" color={color} roughness={0} metalness={0.1} />
     </mesh>
