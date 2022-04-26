@@ -18,16 +18,20 @@ function App() {
     actions,
     mutation,
   } = useStore(state => state);
-
+  
   return (
     <>
       <Canvas 
         shadows 
-        onPointerMove={actions.updateMouse} 
-        onClick={actions.shoot}
-        camera={mutation.camera}
-        onCreated={({ gl }) => {
-          actions.init()
+        // onPointerMove={actions.updateMouse} 
+        // onClick={actions.shoot}
+        linear
+        mode="concurrent"
+        dpr={[1, 1.5]}
+        camera={{ position: [0, 5, 30], near: 0.01, far: 10000 }}
+        gl={{ antialias: false }}
+        onCreated={({ gl, camera }) => {
+          actions.init(camera)
           gl.setClearColor(new THREE.Color('grey'))
         }}
       >

@@ -20,14 +20,16 @@ const randomPosition = () => {
 const useStore = create((set, get) => {
   return {
     // objects loaded in the scene
+    camera: undefined,
     enemys: genEnemys(),
     enemy: null, // current enemy
     actions: {
-      init: () => {
+      init: (camera) => {
+        set({ camera })
         // init camera
-        get().mutation.camera.position.x = 0;
-        get().mutation.camera.position.y = 5;
-        get().mutation.camera.position.z = 30;
+        // get().mutation.camera.position.x = 0;
+        // get().mutation.camera.position.y = 5;
+        // get().mutation.camera.position.z = 30;
       },
       setEnemy: (e) => {
         set({enemy: e})
@@ -45,10 +47,10 @@ const useStore = create((set, get) => {
       }
     },
     mutation: {
+      position: new THREE.Vector3(),
       ray: new THREE.Ray(),
       mouse: new THREE.Vector2(0, 0),
       raycaster: new THREE.Raycaster(),
-      camera: new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 0.1, 10000 ),
     }
   }
 })
