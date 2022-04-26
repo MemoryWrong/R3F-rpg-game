@@ -26,13 +26,17 @@ const useStore = create((set, get) => {
       init: () => {
         // init camera
         get().mutation.camera.position.x = 0;
-        get().mutation.camera.position.y = 2;
-        get().mutation.camera.position.z = 10;
+        get().mutation.camera.position.y = 5;
+        get().mutation.camera.position.z = 30;
       },
       setEnemy: (e) => {
         set({enemy: e})
       },
-      shoot: () => {
+      shoot: (enemy) => {
+        console.log(get().enemy);
+        // get().mutation.camera.lookAt({x: 0, y: 0, z:0})
+        // get().mutation.camera.rotation.y += 0.1;
+
       },
       updateMouse: ({clientX: x, clientY: y}) => { 
         // get().mutation.mouse.set(x - window.innerWidth / 2, y - window.innerHeight / 2)
