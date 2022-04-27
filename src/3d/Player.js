@@ -78,8 +78,7 @@ function Player(props) {
 
   useFrame(() => {
     updateMove();
-    // remove comment once environment is done
-    updateCamera();
+    // updateCamera();
   })
 
   return (
