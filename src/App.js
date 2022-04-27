@@ -74,7 +74,7 @@ function App() {
           segments={20} // Number of particles
         /> */}
         {/* <PointerLockControls /> */}
-        <OrbitControls autoRotate={false} minPolarAngle={Math.PI / 2.4} maxPolarAngle={Math.PI / 2.4} />
+        {/* <OrbitControls autoRotate={false} minPolarAngle={Math.PI / 2.4} maxPolarAngle={Math.PI / 2.4} /> */}
       </Canvas>
       <div style={{ color: 'white', position: 'absolute', top: 30, left: 40 }}>
         <h3>HUD</h3>

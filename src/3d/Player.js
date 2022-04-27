@@ -78,7 +78,7 @@ function Player(props) {
 
   useFrame(() => {
     updateMove();
-    // updateCamera();
+    updateCamera();
   })
 
   return (
