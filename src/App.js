@@ -7,7 +7,9 @@ import Player from './3d/Player';
 import Enemy from './3d/Enemy';
 import { Sky, OrbitControls, GizmoHelper, GizmoViewport, PerspectiveCamera } from "@react-three/drei";
 import useStore from './engine/store';
-import { softShadows, PointerLockControls, FirstPersonControls } from "@react-three/drei"
+import { softShadows, PointerLockControls, FirstPersonControls, Cloud } from "@react-three/drei"
+import Particles from './3d/Particles'
+import Village from './3d/Village'
 
 softShadows()
 
@@ -25,10 +27,10 @@ function App() {
         shadows 
         // onPointerMove={actions.updateMouse} 
         // onClick={actions.shoot}
-        linear
-        mode="concurrent"
+        // linear
+        // mode="concurrent"
         dpr={[1, 1.5]}
-        camera={{ position: [0, 5, 30], near: 0.01, far: 10000 }}
+        camera={{ position: [0, 3, 5], near: 0.01, far: 10000 }}
         gl={{ antialias: false }}
         onCreated={({ gl, camera }) => {
           actions.init(camera)
@@ -37,7 +39,6 @@ function App() {
       >
         {/* Development */}
         {/* <axesHelper /> */}
-        {/* <OrbitControls autoRotate={false} minPolarAngle={Math.PI / 2.4} maxPolarAngle={Math.PI / 2.4} /> */}
         <directionalLight
           castShadow
           position={[2.5, 8, 5]}
@@ -53,16 +54,27 @@ function App() {
         <pointLight position={[-10, 0, -20]} color="red" intensity={2.5} />
         <ambientLight />
         <Sky sunPosition={[100, 20, 100]} />
+        <Village />
+        <Particles />
         <Suspense fallback={null}>
           <Player />
-          {
+          {/* {
             enemys && enemys.map((e, i) => (
               <Enemy key={i} {...e} position={e.position} />
             ))
-          }
+          } */}
         </Suspense>
         <Terrain />
+        <Cloud
+          position={[0, 10, 0]}
+          opacity={0.5}
+          speed={1} // Rotation speed
+          width={1} // Width of the full cloud
+          depth={1.5} // Z-dir depth
+          segments={20} // Number of particles
+        />
         {/* <PointerLockControls /> */}
+        {/* <OrbitControls autoRotate={false} minPolarAngle={Math.PI / 2.4} maxPolarAngle={Math.PI / 2.4} /> */}
       </Canvas>
       <div style={{ color: 'white', position: 'absolute', top: 30, left: 40 }}>
         <h3>HUD</h3>

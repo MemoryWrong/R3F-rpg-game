@@ -1,12 +1,17 @@
 import { useRef, useEffect, useState, useMemo } from 'react'
-import { useFrame, useGraph, useThree} from '@react-three/fiber'
+import { useFrame, useGraph, useLoader, useThree} from '@react-three/fiber'
 import { useControls } from '../utils/useControls'
 import * as THREE from 'three';
 import useStore from '../engine/store';
 import { Html, PerspectiveCamera } from "@react-three/drei";
+import { useFBX, useGLTF } from "@react-three/drei"
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 
 function Player(props) {
   const playerRef = useRef()
+  // const gltf = useLoader(GLTFLoader, '/village/car/scene.gltf')
+
   // can only put constants here
   // because set / get in useStore will 
   // re-render those let / vars which will not be stored
@@ -32,17 +37,12 @@ function Player(props) {
     if(camera !== undefined) {
       const headingRad = playerRef.current.rotation.y;
       camera.rotation.copy(playerRef.current.rotation)
-      camera.position.copy(playerRef.current.rotation)
+      camera.position.copy(playerRef.current.position)
       // set camera behind by apply vector
-      camera.position.x += Math.sin(headingRad) * 30
-      camera.position.y = 5
-      camera.position.z += Math.cos(headingRad) * 30
+      camera.position.x += Math.sin(headingRad) * 5
+      camera.position.y = 3
+      camera.position.z += Math.cos(headingRad) * 5
       camera.updateProjectionMatrix()
-      
-      // bad implementation to get playerRef
-      // camera.position.x = playerRef.current.position.x + Math.sin(headingRad) * 30
-      // camera.position.z = playerRef.current.position.z + Math.cos(headingRad) * 30
-      // camera.matrix.lookAt(playerRef.current.position)
     }
   }
 
@@ -78,6 +78,7 @@ function Player(props) {
 
   useFrame(() => {
     updateMove();
+    // remove comment once environment is done
     updateCamera();
   })
 
@@ -98,6 +99,7 @@ function Player(props) {
       </line>
       <boxGeometry attach="geometry" args={[1, 1, 1]} />
       <meshStandardMaterial attach="material" color={color} roughness={0} metalness={0.1} />
+      {/* <primitive object={gltf.scene} /> */}
     </mesh>
   )
 }
