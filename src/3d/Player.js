@@ -11,7 +11,6 @@ import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils'
 
 function Player(props) {
   const playerRef = useRef()
-  const gltf = useLoader(GLTFLoader, '/characters/character.glb')
 
   // can only put constants here
   // because set / get in useStore will 
@@ -22,14 +21,15 @@ function Player(props) {
   const velocity = 0.05;
   // const pos = mutation.position.clone()
 
-  const { scene, animations, materials } = useGLTF("/characters/bot.glb");
+  // const { scene, animations, materials } = useGLTF("/characters/bot.glb");
+  const { scene, animations, materials } = useGLTF("/characters/character.glb");
   const { actions } = useAnimations(animations, playerRef);
-  const [action, setAction] = useState('idle');
+  const [action, setAction] = useState('Run_front');
   const previousAction = usePrevious(action);
   
   const clone = useMemo(() => SkeletonUtils.clone(scene), [scene])
   const { nodes } = useGraph(clone)
-  console.log(nodes, materials, animations);
+  console.log(actions, nodes, materials, animations);
 
   // TESTING
   const points = [];
@@ -63,33 +63,38 @@ function Player(props) {
   const updateMove = () => {
     const headingRad = playerRef.current.rotation.y;
     const { 
+      attack,
       forward, 
       backward, 
       left, 
       right,
     } = controls.current
     if (forward) {
-      setAction('run')
+      setAction('Run_front')
       playerRef.current.position.x += Math.sin(headingRad) * velocity;
       playerRef.current.position.z += Math.cos(headingRad) * velocity;
     } 
     else if (backward) {
-      setAction('run')
+      setAction('Run_back')
       playerRef.current.position.x -= Math.sin(headingRad) * velocity;
       playerRef.current.position.z -= Math.cos(headingRad) * velocity;
     }
     else if (left) {
       // headingRad += 0.05;
-      setAction('run')
+      setAction('Run_left')
       playerRef.current.rotation.y += 0.05;
     }
     else if (right) {
       // headingRad -= 0.05;
-      setAction('run')
+      setAction('Run_right')
       playerRef.current.rotation.y -= 0.05;
     }
+    else if (attack) {
+      // headingRad -= 0.05;
+      setAction('Attack')
+    }
     else {
-      setAction('idle')
+      setAction('Run_front')
     }
   }
 
@@ -137,8 +142,9 @@ function Player(props) {
       <mesh geometry={hitGeom} material={hitMat}></mesh>
       <group scale={[0.01, 0.01, 0.01]} >
         <primitive object={nodes.mixamorigHips} />
-        <skinnedMesh geometry={nodes.Beta_Joints.geometry} material={materials['Beta_Joints_MAT']} skeleton={nodes.Beta_Joints.skeleton} />
-        <skinnedMesh geometry={nodes.Beta_Surface.geometry} material={materials['asdf1:Beta_HighLimbsGeoSG2']} skeleton={nodes.Beta_Surface.skeleton} />
+        <skinnedMesh geometry={nodes.Maria_J_J_Ong.geometry} material={materials['maria_M1']} skeleton={nodes.Maria_J_J_Ong.skeleton} />
+        {/* <skinnedMesh geometry={nodes.Beta_Joints.geometry} material={materials['Beta_Joints_MAT']} skeleton={nodes.Beta_Joints.skeleton} /> */}
+        {/* <skinnedMesh geometry={nodes.Beta_Surface.geometry} material={materials['asdf1:Beta_HighLimbsGeoSG2']} skeleton={nodes.Beta_Surface.skeleton} /> */}
       </group>
     </group>
   )
