@@ -1,95 +1,31 @@
-import * as THREE from 'three'
-import React, { Suspense, useRef, useEffect, useState, createRef } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import './App.css';
-import Player from './3d/Player';
-import Enemy from './3d/Enemy';
-import { Sky, OrbitControls, GizmoHelper, GizmoViewport, PerspectiveCamera } from "@react-three/drei";
-import useStore from './engine/store';
-import { softShadows, PointerLockControls, FirstPersonControls, Cloud } from "@react-three/drei"
-import Particles from './3d/Particles'
-import GameMap from './3d/GameMap'
-import Ground from './3d/Ground'
+import { Canvas } from "@react-three/fiber"
+import { Sky, PointerLockControls, OrbitControls } from "@react-three/drei"
 import { Physics } from "@react-three/cannon"
+import Ground from "./3d/Ground"
+import GameMap from "./3d/GameMap"
+import Player from "./3d/Player"
+import Grass from "./3d/Grass"
+import { Cube, Cubes } from "./3d/Cube"
 
-softShadows()
+// The original was made by Maksim Ivanow: https://www.youtube.com/watch?v=Lc2JvBXMesY&t=124s
+// This demo needs pointer-lock, that works only if you open it in a new window
+// Controls: WASD + left click
 
-function App() {
-  const {
-    enemys,
-    enemy,
-    actions,
-    mutation,
-  } = useStore(state => state);
-  
+export default function App() {
   return (
-    <>
-      <Canvas 
-        shadows 
-        // onPointerMove={actions.updateMouse} 
-        // onClick={actions.shoot}
-        // linear
-        // mode="concurrent"
-        dpr={[1, 1.5]}
-        camera={{ position: [0, 3, 5], near: 0.01, far: 10000 }}
-        gl={{ antialias: false }}
-        onCreated={({ gl, camera }) => {
-          actions.init(camera)
-          gl.setClearColor(new THREE.Color('grey'))
-        }}
-      >
-        {/* Development */}
-        {/* <axesHelper /> */}
-        <directionalLight
-          castShadow
-          position={[2.5, 8, 5]}
-          intensity={1.5}
-          shadow-mapSize-width={1024}
-          shadow-mapSize-height={1024}
-          shadow-camera-far={50}
-          shadow-camera-left={-10}
-          shadow-camera-right={10}
-          shadow-camera-top={10}
-          shadow-camera-bottom={-10}
-        />
-        {/* <pointLight position={[-10, 0, -20]} color="red" intensity={2.5} /> */}
-        <ambientLight />
-        <Sky sunPosition={[100, 20, 100]} />
-        <Particles />
-        <Physics gravity={[0, -30, 0]}>
-          <Suspense fallback={null}>
-            <Ground />
-            <mesh 
-              position={[0, 0, 0]} 
-              castShadow 
-              receiveShadow
-              >
-              <sphereBufferGeometry attach="geometry" args={[0.5, 32, 32]} />
-              <meshStandardMaterial attach="material" color={'green'} roughness={0} metalness={0.1} />
-            </mesh>
-            <Player />
-          </Suspense>
-        </Physics>
-        {/* <Cloud
-          position={[0, 10, 0]}
-          opacity={0.5}
-          speed={1} // Rotation speed
-          width={1} // Width of the full cloud
-          depth={1.5} // Z-dir depth
-          segments={20} // Number of particles
-        /> */}
-        {/* <PointerLockControls /> */}
-        {/* <OrbitControls autoRotate={false} minPolarAngle={Math.PI / 2.4} maxPolarAngle={Math.PI / 2.4} /> */}
-      </Canvas>
-      <div style={{ color: 'white', position: 'absolute', top: 30, left: 40 }}>
-        <h3>HUD</h3>
-        <div>
-          <p>A, W, S, D move</p>
-          <p>enemy name: {enemy?.props.name}</p>
-          <p>enemy id: {enemy?.props.id}</p>
-        </div>
-      </div>
-    </>
+    <Canvas shadows gl={{ alpha: false }} camera={{ fov: 45 }}>
+      <Sky sunPosition={[100, 20, 100]} />
+      <ambientLight intensity={0.3} />
+      <pointLight castShadow intensity={0.8} position={[100, 100, 100]} />
+      <Physics gravity={[0, -30, 0]}>
+        <GameMap />
+        {/* <Grass position={[0, 0, 0]} /> */}
+        <Player position={[0, 0, 0]} />
+        {/* <Cube position={[0, 0, 0]} /> */}
+        {/* <Cubes /> */}
+      </Physics>
+      {/* <PointerLockControls /> */}
+      <OrbitControls autoRotate={false} minPolarAngle={Math.PI / 2.4} maxPolarAngle={Math.PI / 2.4} />
+    </Canvas>
   )
 }
-export default App;

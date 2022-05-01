@@ -8,18 +8,17 @@ import { useFBX, useGLTF } from "@react-three/drei"
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils'
-import { useSphere } from "@react-three/cannon"
+import { useBox, useSphere } from "@react-three/cannon"
 
 function Player(props) {
   const playerRef = useRef()
-  const [ref, api] = useSphere(() => ({ mass: 1, type: "Dynamic", position: [0, 10, 0], ...props }))
 
   // can only put constants here
   // because set / get in useStore will 
   // re-render those let / vars which will not be stored
   const controls = useControls();
   const { camera } = useThree()
-  const velocity = 0.1;
+  const velocity = 0.05;
   // const pos = mutation.position.clone()
 
   /**
@@ -54,9 +53,9 @@ function Player(props) {
       camera.position.copy(playerRef.current.position)
       // set camera behind by apply vector
       camera.rotation.y -= Math.PI;
-      camera.position.x -= Math.sin(headingRad) * 5
+      camera.position.x -= Math.sin(headingRad) * 15
       camera.position.y = 3
-      camera.position.z -= Math.cos(headingRad) * 5
+      camera.position.z -= Math.cos(headingRad) * 15
       camera.updateProjectionMatrix()
     }
   }
@@ -135,7 +134,7 @@ function Player(props) {
       {/* <line geometry={lineGeometry}>
         <lineBasicMaterial attach="material" color={'red'} linewidth={10} linecap={'round'} linejoin={'round'} />
       </line> */}
-      <group ref={ref} scale={[0.01, 0.01, 0.01]} >
+      <group ref={null} scale={[0.01, 0.01, 0.01]} >
         <primitive object={nodes.mixamorigHips} />
         <skinnedMesh geometry={nodes.Maria_J_J_Ong.geometry} material={materials['maria_M1']} skeleton={nodes.Maria_J_J_Ong.skeleton} />
       </group>
