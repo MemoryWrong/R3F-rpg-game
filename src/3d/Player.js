@@ -17,13 +17,14 @@ function Player(props) {
   // can only put constants here
   // because set / get in useStore will 
   // re-render those let / vars which will not be stored
-  const [color, setColor] = useState('green');
   const controls = useControls();
   const { camera } = useThree()
-  const velocity = 0.05;
+  const velocity = 0.1;
   // const pos = mutation.position.clone()
 
-  // const { scene, animations, materials } = useGLTF("/characters/bot.glb");
+  /**
+   * animations settings
+   */
   const { scene, animations, materials } = useGLTF("/characters/character.glb");
   const { actions } = useAnimations(animations, playerRef);
   const [action, setAction] = useState('Run_front');
@@ -31,13 +32,15 @@ function Player(props) {
   
   const clone = useMemo(() => SkeletonUtils.clone(scene), [scene])
   const { nodes } = useGraph(clone)
-  console.log(actions, nodes, materials, animations);
 
-  // TESTING
-  const points = [];
-  points.push(new THREE.Vector3(0, 0, 0))
-  points.push(new THREE.Vector3(0, 0, -1))
-  const lineGeometry = new THREE.BufferGeometry().setFromPoints(points)
+  /**
+   * TESTING 
+   * for player direction display
+   */
+  // const points = [];
+  // points.push(new THREE.Vector3(0, 0, 0))
+  // points.push(new THREE.Vector3(0, 0, -1))
+  // const lineGeometry = new THREE.BufferGeometry().setFromPoints(points)
 
   /**
    * update camera position
@@ -83,21 +86,17 @@ function Player(props) {
       playerRef.current.position.z -= Math.cos(headingRad) * velocity;
     }
     else if (left) {
-      // headingRad += 0.05;
       setAction('Run_left')
       playerRef.current.rotation.y += 0.05;
     }
     else if (right) {
-      // headingRad -= 0.05;
       setAction('Run_right')
       playerRef.current.rotation.y -= 0.05;
     }
     else if (attack) {
-      // headingRad -= 0.05;
       setAction('Attack')
     }
     else if (jump) {
-      // headingRad -= 0.05;
       setAction('Jump')
     }
     else {
@@ -136,13 +135,9 @@ function Player(props) {
       {/* <line geometry={lineGeometry}>
         <lineBasicMaterial attach="material" color={'red'} linewidth={10} linecap={'round'} linejoin={'round'} />
       </line> */}
-      {/*<boxGeometry attach="geometry" args={[1, 1, 1]} />
-      <meshStandardMaterial attach="material" color={color} roughness={0} metalness={0.1} /> */}
       <group ref={ref} scale={[0.01, 0.01, 0.01]} >
         <primitive object={nodes.mixamorigHips} />
         <skinnedMesh geometry={nodes.Maria_J_J_Ong.geometry} material={materials['maria_M1']} skeleton={nodes.Maria_J_J_Ong.skeleton} />
-        {/* <skinnedMesh geometry={nodes.Beta_Joints.geometry} material={materials['Beta_Joints_MAT']} skeleton={nodes.Beta_Joints.skeleton} /> */}
-        {/* <skinnedMesh geometry={nodes.Beta_Surface.geometry} material={materials['asdf1:Beta_HighLimbsGeoSG2']} skeleton={nodes.Beta_Surface.skeleton} /> */}
       </group>
     </group>
   )

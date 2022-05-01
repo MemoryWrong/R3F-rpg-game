@@ -2,7 +2,6 @@ import * as THREE from 'three'
 import React, { Suspense, useRef, useEffect, useState, createRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import './App.css';
-import Terrain from './3d/Terrain';
 import Player from './3d/Player';
 import Enemy from './3d/Enemy';
 import { Sky, OrbitControls, GizmoHelper, GizmoViewport, PerspectiveCamera } from "@react-three/drei";

@@ -2,7 +2,7 @@ import {createRoot} from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import App from './App';
-import React, { useRef, useState, Suspense } from 'react'
+import React from 'react'
 
 createRoot(document.getElementById('root')).render(
   <App />

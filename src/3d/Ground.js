@@ -9,7 +9,7 @@ const Ground = (props) => {
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping
   return (
     <mesh ref={ref} receiveShadow>
-      <planeGeometry args={[1000, 1000]} />
+      <planeGeometry args={[100, 100]} />
       <meshStandardMaterial map={texture} map-repeat={[240, 240]} color="grey" />
     </mesh>
   )
