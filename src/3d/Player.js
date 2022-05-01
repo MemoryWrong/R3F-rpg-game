@@ -8,9 +8,11 @@ import { useFBX, useGLTF } from "@react-three/drei"
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils'
+import { useSphere } from "@react-three/cannon"
 
 function Player(props) {
   const playerRef = useRef()
+  const [ref, api] = useSphere(() => ({ mass: 1, type: "Dynamic", position: [0, 10, 0], ...props }))
 
   // can only put constants here
   // because set / get in useStore will 
@@ -68,6 +70,7 @@ function Player(props) {
       backward, 
       left, 
       right,
+      jump
     } = controls.current
     if (forward) {
       setAction('Run_front')
@@ -93,8 +96,12 @@ function Player(props) {
       // headingRad -= 0.05;
       setAction('Attack')
     }
+    else if (jump) {
+      // headingRad -= 0.05;
+      setAction('Jump')
+    }
     else {
-      setAction('Run_front')
+      setAction('Idle')
     }
   }
 
@@ -117,30 +124,21 @@ function Player(props) {
     actions[action].fadeIn(0.2);
   }, [actions, action, previousAction]);
   
-  var hitGeom = new THREE.BoxBufferGeometry(0, 0, 0);
-  var hitMat = new THREE.MeshBasicMaterial({visible: false});
-
   return (
     <group 
       ref={playerRef} 
-      position={props.position ? props.position : [0, 0.5, 0]}
+      position={props.position ? props.position : [0, -1, 0]}
       {...props} 
       castShadow 
       receiveShadow
-      onPointerOver={() => setColor('lightgreen')}
-      onPointerLeave={() => setColor('green')}
     >
       {/* for testing show heading of player */}
-      <line geometry={lineGeometry}>
+      {/* <line geometry={lineGeometry}>
         <lineBasicMaterial attach="material" color={'red'} linewidth={10} linecap={'round'} linejoin={'round'} />
-      </line>
+      </line> */}
       {/*<boxGeometry attach="geometry" args={[1, 1, 1]} />
       <meshStandardMaterial attach="material" color={color} roughness={0} metalness={0.1} /> */}
-      
-      {/* <primitive object={gltf.scene} /> */}
-      {/* <mesh geometry={hitGeom} material={hitMat}></mesh> */}
-      <mesh geometry={hitGeom} material={hitMat}></mesh>
-      <group scale={[0.01, 0.01, 0.01]} >
+      <group ref={ref} scale={[0.01, 0.01, 0.01]} >
         <primitive object={nodes.mixamorigHips} />
         <skinnedMesh geometry={nodes.Maria_J_J_Ong.geometry} material={materials['maria_M1']} skeleton={nodes.Maria_J_J_Ong.skeleton} />
         {/* <skinnedMesh geometry={nodes.Beta_Joints.geometry} material={materials['Beta_Joints_MAT']} skeleton={nodes.Beta_Joints.skeleton} /> */}

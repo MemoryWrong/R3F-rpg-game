@@ -10,6 +10,8 @@ import useStore from './engine/store';
 import { softShadows, PointerLockControls, FirstPersonControls, Cloud } from "@react-three/drei"
 import Particles from './3d/Particles'
 import GameMap from './3d/GameMap'
+import Ground from './3d/Ground'
+import { Physics } from "@react-three/cannon"
 
 softShadows()
 
@@ -54,17 +56,21 @@ function App() {
         {/* <pointLight position={[-10, 0, -20]} color="red" intensity={2.5} /> */}
         <ambientLight />
         <Sky sunPosition={[100, 20, 100]} />
-        <GameMap />
         <Particles />
-        <Suspense fallback={null}>
-          <Player />
-          {/* {
-            enemys && enemys.map((e, i) => (
-              <Enemy key={i} {...e} position={e.position} />
-            ))
-          } */}
-        </Suspense>
-        {/* <Terrain /> */}
+        <Physics gravity={[0, -30, 0]}>
+          <Suspense fallback={null}>
+            <Ground />
+            <mesh 
+              position={[0, 0, 0]} 
+              castShadow 
+              receiveShadow
+              >
+              <sphereBufferGeometry attach="geometry" args={[0.5, 32, 32]} />
+              <meshStandardMaterial attach="material" color={'green'} roughness={0} metalness={0.1} />
+            </mesh>
+            <Player />
+          </Suspense>
+        </Physics>
         {/* <Cloud
           position={[0, 10, 0]}
           opacity={0.5}

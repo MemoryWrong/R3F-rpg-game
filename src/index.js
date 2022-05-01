@@ -5,9 +5,7 @@ import App from './App';
 import React, { useRef, useState, Suspense } from 'react'
 
 createRoot(document.getElementById('root')).render(
-<Suspense fallback={null}>
   <App />
-</Suspense>
 )
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
