@@ -1,9 +1,9 @@
-import { useRef, useEffect, useState, useMemo } from 'react'
+import { useRef, useEffect, useState, useMemo, forwardRef } from 'react'
 import { useFrame, useGraph, useLoader, useThree} from '@react-three/fiber'
 import { useControls } from '../utils/useControls'
 import * as THREE from 'three';
 import useStore from '../engine/store';
-import { Html, PerspectiveCamera, useAnimations } from "@react-three/drei";
+import { Box, Html, PerspectiveCamera, useAnimations, RoundedBox } from "@react-three/drei";
 import { useFBX, useGLTF } from "@react-three/drei"
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
@@ -122,10 +122,19 @@ function Player(props) {
     actions[action].fadeIn(0.2);
   }, [actions, action, previousAction]);
   
+  const PlayerShape = forwardRef(({ children, transparent = false, opacity = 1, color = 'white', args = [1, 1, 1], ...props }, ref) => {
+    return (
+      <RoundedBox args={args} receiveShadow castShadow ref={ref} {...props}>
+        <meshStandardMaterial color={color} transparent={transparent} opacity={opacity} />
+        {children}
+      </RoundedBox>
+    )
+  })
+
   return (
     <group 
       ref={playerRef} 
-      position={props.position ? props.position : [0, -1, 0]}
+      // position={props.position ? props.position : [0, 0, 0]}
       {...props} 
       castShadow 
       receiveShadow
@@ -134,15 +143,14 @@ function Player(props) {
       {/* <line geometry={lineGeometry}>
         <lineBasicMaterial attach="material" color={'red'} linewidth={10} linecap={'round'} linejoin={'round'} />
       </line> */}
-      <group ref={null} scale={[0.01, 0.01, 0.01]} >
+      <mesh scale={[0.01, 0.01, 0.01]} position={[0, 0, 0]} >
         <primitive object={nodes.mixamorigHips} />
         <skinnedMesh geometry={nodes.Maria_J_J_Ong.geometry} material={materials['maria_M1']} skeleton={nodes.Maria_J_J_Ong.skeleton} />
-      </group>
+      </mesh>
+      <PlayerShape scale={[1,2,1]} position={[0, 1, 0]} opacity={0.7} transparent={true} />
     </group>
   )
 }
-
-useGLTF.preload("/characters/bot.glb");
 
 const usePrevious = (value) => {
   // The ref object is a generic container whose current property is mutable ...

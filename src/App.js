@@ -4,6 +4,7 @@ import { Physics } from "@react-three/cannon"
 import Ground from "./3d/Ground"
 import GameMap from "./3d/GameMap"
 import Player from "./3d/Player"
+import Bot from "./3d/Bot"
 import Grass from "./3d/Grass"
 import { Cube, Cubes } from "./3d/Cube"
 
@@ -18,9 +19,11 @@ export default function App() {
       <ambientLight intensity={0.3} />
       <pointLight castShadow intensity={0.8} position={[100, 100, 100]} />
       <Physics gravity={[0, -30, 0]}>
-        <GameMap />
+        {/* <GameMap /> */}
+        <Ground />
         {/* <Grass position={[0, 0, 0]} /> */}
-        <Player position={[0, 0, 0]} />
+        {/* <Player position={[0, 0, 0]} /> */}
+        <Bot position={[0, 0, 0]} />
         {/* <Cube position={[0, 0, 0]} /> */}
         {/* <Cubes /> */}
       </Physics>
