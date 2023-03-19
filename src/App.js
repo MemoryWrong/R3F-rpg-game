@@ -19,8 +19,8 @@ export default function App() {
       <ambientLight intensity={0.3} />
       <pointLight castShadow intensity={0.8} position={[100, 100, 100]} />
       <Physics gravity={[0, -30, 0]}>
-        {/* <GameMap /> */}
-        <Ground />
+        <GameMap />
+        {/* <Ground /> */}
         {/* <Grass position={[0, 0, 0]} /> */}
         {/* <Player position={[0, 0, 0]} /> */}
         <Bot position={[0, 0, 0]} />

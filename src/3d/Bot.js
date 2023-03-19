@@ -14,7 +14,7 @@ function Player(props) {
   const playerRef = useRef()
 
   // can only put constants here
-  // because set / get in useStore will 
+  // because set / get in useStore will
   // re-render those let / vars which will not be stored
   const controls = useControls();
   const { camera } = useThree()
@@ -28,12 +28,12 @@ function Player(props) {
   const { actions } = useAnimations(animations, playerRef);
   const [action, setAction] = useState('Run_front');
   const previousAction = usePrevious(action);
-  
+
   const clone = useMemo(() => SkeletonUtils.clone(scene), [scene])
   const { nodes } = useGraph(clone)
 
   /**
-   * TESTING 
+   * TESTING
    * for player direction display
    */
   // const points = [];
@@ -61,16 +61,16 @@ function Player(props) {
   }
 
   /**
-   * use keyboard control to 
+   * use keyboard control to
    * move the player
    */
   const updateMove = () => {
     const headingRad = playerRef.current.rotation.y;
-    const { 
+    const {
       attack,
-      forward, 
-      backward, 
-      left, 
+      forward,
+      backward,
+      left,
       right,
       jump
     } = controls.current
@@ -78,7 +78,7 @@ function Player(props) {
       setAction('Run_front')
       playerRef.current.position.x += Math.sin(headingRad) * velocity;
       playerRef.current.position.z += Math.cos(headingRad) * velocity;
-    } 
+    }
     else if (backward) {
       setAction('Run_back')
       playerRef.current.position.x -= Math.sin(headingRad) * velocity;
@@ -121,7 +121,7 @@ function Player(props) {
     actions[action].play();
     actions[action].fadeIn(0.2);
   }, [actions, action, previousAction]);
-  
+
   const PlayerShape = forwardRef(({ children, transparent = false, opacity = 1, color = 'white', args = [1, 1, 1], ...props }, ref) => {
     return (
       <RoundedBox args={args} receiveShadow castShadow ref={ref} {...props}>
@@ -132,11 +132,11 @@ function Player(props) {
   })
 
   return (
-    <group 
-      ref={playerRef} 
+    <group
+      ref={playerRef}
       // position={props.position ? props.position : [0, 0, 0]}
-      {...props} 
-      castShadow 
+      {...props}
+      castShadow
       receiveShadow
     >
       {/* for testing show heading of player */}
@@ -147,7 +147,7 @@ function Player(props) {
         <primitive object={nodes.mixamorigHips} />
         <skinnedMesh geometry={nodes.Maria_J_J_Ong.geometry} material={materials['maria_M1']} skeleton={nodes.Maria_J_J_Ong.skeleton} />
       </mesh>
-      <PlayerShape scale={[1,2,1]} position={[0, 1, 0]} opacity={0.7} transparent={true} />
+      {/* <PlayerShape scale={[1,2,1]} position={[0, 1, 0]} opacity={0.7} transparent={true} /> */}
     </group>
   )
 }
@@ -159,7 +159,7 @@ const usePrevious = (value) => {
   // Store current value in ref
   useEffect(() => {
     ref.current = value;
-  }, [value]); 
+  }, [value]);
   // Return previous value (happens before update in useEffect above)
   return ref.current;
 }
